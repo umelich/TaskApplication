@@ -1,25 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.ComponentModel;
 using System.IO;
-using System.Linq;
-using System.Reflection;
-using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
-namespace ToDoApplication
+namespace TaskApplication
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
@@ -33,6 +19,11 @@ namespace ToDoApplication
 
             ToDoListBox.ItemsSource = tasksList;
             ToDoListBox.DisplayMemberPath = "Name";
+
+            Description.ItemsSource = tasksList;
+            Description.DisplayMemberPath = "Description";
+
+            
         }
 
         private void ToDoListBox_MouseDoubleClick(object sender, MouseButtonEventArgs e)
@@ -88,6 +79,7 @@ namespace ToDoApplication
             if (AllRadioButton.IsChecked == true || AllRadioButton.IsChecked == null)
                 CompleteButton.Content = "Завершити";
             ToDoListBox.ItemsSource = tasksList;
+            Description.ItemsSource = tasksList;
         }
 
         private void NotCompletedRadioButton_Checked(object sender, RoutedEventArgs e)
@@ -109,6 +101,7 @@ namespace ToDoApplication
                 }
             }
             ToDoListBox.ItemsSource = filtered;
+            Description.ItemsSource = filtered;
         }
 
         private void CompletedRadioButton_Checked(object sender, RoutedEventArgs e)
@@ -130,6 +123,7 @@ namespace ToDoApplication
                 }
             }
             ToDoListBox.ItemsSource = filtered;
+            Description.ItemsSource = filtered;
         }
 
         string fileName = "data.bin";
@@ -143,7 +137,7 @@ namespace ToDoApplication
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            if (File.Exists(fileName))
+            try
             {
                 BinaryFormatter formatter = new BinaryFormatter();
                 Stream file = File.OpenRead(fileName);
@@ -151,7 +145,12 @@ namespace ToDoApplication
                 file.Close();
 
                 ToDoListBox.ItemsSource = tasksList;
+                Description.ItemsSource = tasksList;
                 AllRadioButton.IsChecked = true;
+            }
+            catch (Exception )
+            {
+                MessageBox.Show("Не вдалось відкрити збережені задачі");
             }
         }
         public void Refresh()
