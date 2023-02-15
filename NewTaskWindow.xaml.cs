@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Globalization;
 using System.Windows;
 using System.Windows.Media;
 

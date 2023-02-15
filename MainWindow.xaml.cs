@@ -3,7 +3,6 @@ using System.Collections.ObjectModel;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Windows;
-using System.Windows.Input;
 
 namespace TaskApplication
 {
@@ -13,15 +12,17 @@ namespace TaskApplication
     public partial class MainWindow : Window
     {
         ObservableCollection<Task> tasksList = new ObservableCollection<Task>();
+        string fileName = "data.bin";
+
         public MainWindow()
         {
             InitializeComponent();
 
-            ToDoListBox.ItemsSource = tasksList;
+            ToDoListBox.ItemsSource = Description.ItemsSource = CreateDateToString.ItemsSource = CompletionDateToString.ItemsSource = tasksList;
             ToDoListBox.DisplayMemberPath = "Name";
-
-            Description.ItemsSource = tasksList;
-            Description.DisplayMemberPath = "Description";   
+            Description.DisplayMemberPath = "Description";
+            CreateDateToString.DisplayMemberPath = "CreateDateToString";
+            CompletionDateToString.DisplayMemberPath = "CompletionDateToString";
         }
 
         private void AddButton_Click(object sender, RoutedEventArgs e)
@@ -50,25 +51,40 @@ namespace TaskApplication
             }
             Refresh();
         }
+
         private void CompleteButton_Click(object sender, RoutedEventArgs e)
         {
             Task selected = ToDoListBox.SelectedItem as Task;
             if (selected != null)
             {
                 if (CompletedRadioButton.IsChecked == true)
+                {
                     selected.IsCompleted = false;
+                    selected.CompletionDateToString = "";
+                }
                 else
+                {
                     selected.IsCompleted = true;
+                    selected.CompletionDateToString = DateTime.Now.ToString("d-MMMM-yyyy HH:mm:ss");
+                    selected.CompletionDate = DateTime.Now;
+                }
             }
             Refresh();
+        }
+        public void Refresh()
+        {
+            if (NotCompletedRadioButton.IsChecked == true)
+                NotCompletedRadioButtonMethod();
+            if (CompletedRadioButton.IsChecked == true)
+                CompletedRadioButtonMethod();
         }
 
         private void AllRadioButton_Checked(object sender, RoutedEventArgs e)
         {
             if (AllRadioButton.IsChecked == true || AllRadioButton.IsChecked == null)
                 CompleteButton.Content = "Завершити";
-            ToDoListBox.ItemsSource = tasksList;
-            Description.ItemsSource = tasksList;
+
+            ToDoListBox.ItemsSource = Description.ItemsSource = CreateDateToString.ItemsSource = CompletionDateToString.ItemsSource = tasksList;
         }
 
         private void NotCompletedRadioButton_Checked(object sender, RoutedEventArgs e)
@@ -89,8 +105,7 @@ namespace TaskApplication
                     filtered.Add(current);
                 }
             }
-            ToDoListBox.ItemsSource = filtered;
-            Description.ItemsSource = filtered;
+            ToDoListBox.ItemsSource = Description.ItemsSource = CreateDateToString.ItemsSource = CompletionDateToString.ItemsSource = filtered;
         }
 
         private void CompletedRadioButton_Checked(object sender, RoutedEventArgs e)
@@ -111,11 +126,9 @@ namespace TaskApplication
                     filtered.Add(current);
                 }
             }
-            ToDoListBox.ItemsSource = filtered;
-            Description.ItemsSource = filtered;
+            ToDoListBox.ItemsSource = Description.ItemsSource = CreateDateToString.ItemsSource = CompletionDateToString.ItemsSource = filtered;
         }
 
-        string fileName = "data.bin";
         private void Window_Closed(object sender, EventArgs e)
         {
             BinaryFormatter formatter = new BinaryFormatter();
@@ -132,24 +145,13 @@ namespace TaskApplication
                 Stream file = File.OpenRead(fileName);
                 tasksList = formatter.Deserialize(file) as ObservableCollection<Task>;
                 file.Close();
-
-                ToDoListBox.ItemsSource = tasksList;
-                Description.ItemsSource = tasksList;
                 AllRadioButton.IsChecked = true;
             }
-            catch (Exception )
+            catch (Exception)
             {
-                MessageBox.Show("Не вдалось відкрити збережені задачі");
+                MessageBox.Show("Файл не знайдено");
             }
         }
-        public void Refresh()
-        {
-            if (NotCompletedRadioButton.IsChecked == true)
-                NotCompletedRadioButtonMethod();
-            else if (CompletedRadioButton.IsChecked == true)
-                CompletedRadioButtonMethod();
-            else
-                ToDoListBox.ItemsSource = tasksList;
-        }
+
     }
 }

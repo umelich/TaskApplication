@@ -5,39 +5,48 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:TaskApplication"
         mc:Ignorable="d"
-        Title="Список задач" Height="400" Width="400" MinWidth="350" MinHeight="400" Closed="Window_Closed" Loaded="Window_Loaded">
+        Title="Список задач" Height="400" Width="600" MinWidth="550" MinHeight="300" Closed="Window_Closed" Loaded="Window_Loaded" >
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="30"/>
+            <RowDefinition Height="20"/>
             <RowDefinition Height="30"/>
             <RowDefinition Height="10*"/>
-            <RowDefinition Height="40"/>
+            <RowDefinition Height="30"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition MinWidth="100"/>
             <ColumnDefinition Width="3"/>
             <ColumnDefinition MinWidth="100"/>
+            <ColumnDefinition Width="3"/>
+            <ColumnDefinition MinWidth="100"/>
+            <ColumnDefinition Width="3"/>
+            <ColumnDefinition MinWidth="100"/>
         </Grid.ColumnDefinitions>
 
-        <ListBox Grid.Column="0" Grid.Row="2" x:Name="ToDoListBox" d:ItemsSource="{d:SampleData ItemCount=5}" />
-        <GridSplitter Grid.Column="1" Grid.Row="2" ShowsPreview="False" Width="3"
-        HorizontalAlignment="Center" VerticalAlignment="Stretch" />
-        <ListBox Grid.Column="2" Grid.Row="2" x:Name="Description" d:ItemsSource="{d:SampleData ItemCount=5}"/>
+        <StackPanel Grid.Column="0" Grid.ColumnSpan="7" Grid.Row="0" HorizontalAlignment="Center" Orientation="Horizontal">
+            <RadioButton x:Name="AllRadioButton" Content="Усі  " VerticalAlignment="Center" Checked="AllRadioButton_Checked"/>
+            <RadioButton x:Name="NotCompletedRadioButton" Content="Не виконані  " VerticalAlignment="Center" Checked="NotCompletedRadioButton_Checked"/>
+            <RadioButton x:Name="CompletedRadioButton" Content="Виконані" VerticalAlignment="Center" Checked="CompletedRadioButton_Checked"/>
+        </StackPanel>
 
-        <StackPanel Grid.Column="0" Grid.Row="3" Grid.ColumnSpan="3" Orientation="Horizontal" HorizontalAlignment="Center">
+        <Label Grid.Column="0" Grid.Row="1" HorizontalAlignment="Center" Content="Задача"/>
+        <Label Grid.Column="2" Grid.Row="1" HorizontalAlignment="Center" Content="Опис"/>
+        <Label Grid.Column="4" Grid.Row="1" HorizontalAlignment="Center" Content="Дата створення"/>
+        <Label Grid.Column="6" Grid.Row="1" HorizontalAlignment="Center" Content="Дата виконання"/>
+
+        <ListBox Grid.Column="0" Grid.Row="2" x:Name="ToDoListBox" d:ItemsSource="{d:SampleData ItemCount=5}" />
+        <GridSplitter Grid.Column="1" Grid.Row="1" Grid.RowSpan="2"  ShowsPreview="False" Width="3" HorizontalAlignment="Center" VerticalAlignment="Stretch" />
+        <ListView Grid.Column="2" Grid.Row="2" x:Name="Description" d:ItemsSource="{d:SampleData ItemCount=5}"/>
+        <GridSplitter Grid.Column="3" Grid.Row="1" Grid.RowSpan="2" ShowsPreview="False" Width="3" HorizontalAlignment="Center" VerticalAlignment="Stretch" />
+        <ListView Grid.Column="4" Grid.Row="2" x:Name="CreateDateToString" d:ItemsSource="{d:SampleData ItemCount=5}"/>
+        <GridSplitter Grid.Column="5" Grid.Row="1" Grid.RowSpan="2" ShowsPreview="False" Width="3" HorizontalAlignment="Center" VerticalAlignment="Stretch" />
+        <ListView Grid.Column="6" Grid.Row="2" x:Name="CompletionDateToString" d:ItemsSource="{d:SampleData ItemCount=5}"/>
+
+        <StackPanel Grid.Column="0" Grid.Row="3" Grid.ColumnSpan="7" Orientation="Horizontal" HorizontalAlignment="Center">
             <Button x:Name="AddButton" Content="Додати" VerticalAlignment="Center" Margin="0,0,12,0" Width="90" Click="AddButton_Click"/>
             <Button x:Name="CompleteButton" Content="Завершити" VerticalAlignment="Center" Width="90" Click="CompleteButton_Click"/>
             <Button x:Name="DeleteButton" Content="Видалити" VerticalAlignment="Center" Margin="12,0,0,0" Width="90" Click="DeleteButton_Click"/>
         </StackPanel>
-
-        <StackPanel Grid.Column="0" Grid.ColumnSpan="3" Grid.Row="0" HorizontalAlignment="Center" Orientation="Horizontal">
-            <RadioButton x:Name="AllRadioButton" Content="Усі  " VerticalAlignment="Center" Checked="AllRadioButton_Checked" IsChecked="True"/>
-            <RadioButton x:Name="NotCompletedRadioButton" Content="Не виконані  " VerticalAlignment="Center" Checked="NotCompletedRadioButton_Checked" IsChecked="False"/>
-            <RadioButton x:Name="CompletedRadioButton" Content="Виконані" VerticalAlignment="Center" Checked="CompletedRadioButton_Checked"/>
-        </StackPanel>
-        
-        <Label Grid.Column="0" Grid.Row="1" HorizontalAlignment="Center" Content="Задача"/>
-        <Label Grid.Column="2" Grid.Row="1" HorizontalAlignment="Center" Content="Опис"/>
-        
+ 
     </Grid>
 </Window>
