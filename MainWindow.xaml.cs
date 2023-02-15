@@ -21,18 +21,7 @@ namespace TaskApplication
             ToDoListBox.DisplayMemberPath = "Name";
 
             Description.ItemsSource = tasksList;
-            Description.DisplayMemberPath = "Description";
-
-            
-        }
-
-        private void ToDoListBox_MouseDoubleClick(object sender, MouseButtonEventArgs e)
-        {
-            Task selected = ToDoListBox.SelectedItem as Task;
-            if (selected != null)
-            {
-                MessageBox.Show(selected.Description);
-            }
+            Description.DisplayMemberPath = "Description";   
         }
 
         private void AddButton_Click(object sender, RoutedEventArgs e)
